@@ -1,51 +1,51 @@
 /**
- * This file is a part of IRQSwitch library for embedded devices.
+ * This file is a part of Switch library for embedded devices.
  *
- * File:		IRQSwitch.cpp
+ * File:		Switch.cpp
  * Created on:	31. 10. 2018
  * Author:		Denis Colesnicov <eugustus@gmail.com>
  * Licence:		MIT
- * Home:		https://github.com/colesnicov/IRQSwitch
+ * Home:		https://github.com/colesnicov/Switch
  * Version:		2.9.0
  */
 
-#include "IRQSwitch.hpp"
+#include "Switch.hpp"
 
-IRQSwitch::IRQSwitch() {
+Switch::Switch() {
 }
 
-IRQSwitch::~IRQSwitch() {
+Switch::~Switch() {
 }
 
-#if IRQSWITCH_IMPLEMENT_CLICK_HELD
+#if SWITCH_IMPLEMENT_CLICK_HELD
 
-bool IRQSwitch::isHolded(uint32_t ms) {
+bool Switch::isHolded(uint32_t ms) {
 	bool _is_clicked;
 	uint32_t _start_click;
 
-	IRQSWITCH_ATOMIC_START
+	SWITCH_ATOMIC_START
 		_is_clicked = m_is_clicked;
 		_start_click = m_start_click;
-	IRQSWITCH_ATOMIC_END
+	SWITCH_ATOMIC_END
 
 	return _is_clicked && ms - _start_click > m_time_hold;
 }
 #endif
 
-void IRQSwitch::CleanClick() {
-	IRQSWITCH_ATOMIC_START
+void Switch::CleanClick() {
+	SWITCH_ATOMIC_START
 		m_end_click = 0;
-	IRQSWITCH_ATOMIC_END
+	SWITCH_ATOMIC_END
 }
 
-bool IRQSwitch::isClicked() {
+bool Switch::isClicked() {
 	bool _is_clicked;
 	uint32_t _end_click;
 
-	IRQSWITCH_ATOMIC_START
+	SWITCH_ATOMIC_START
 		_is_clicked = m_is_clicked;
 		_end_click = m_end_click;
-	IRQSWITCH_ATOMIC_END
+	SWITCH_ATOMIC_END
 
 	if (!_is_clicked && _end_click > 0) {
 		CleanClick();
@@ -58,7 +58,7 @@ bool IRQSwitch::isClicked() {
 /**
  * @note Metoda je volana v rutine preruseni. ATOMIC_BLOCK neumistovat!
  */
-void IRQSwitch::setClick(uint32_t ms) {
+void Switch::setClick(uint32_t ms) {
 	if (ms - m_end_click > m_time_debounce || m_end_click == 0) {
 		m_end_click = ms;
 		m_is_clicked = false;
@@ -68,19 +68,19 @@ void IRQSwitch::setClick(uint32_t ms) {
 /**
  * @note Metoda je volana v rutine preruseni. ATOMIC_BLOCK neumistovat!
  */
-bool IRQSwitch::setClickEnd(uint32_t ms) {
+bool Switch::setClickEnd(uint32_t ms) {
 	if ((ms - m_end_click > m_time_debounce || m_end_click == 0)) {
 		m_end_click = ms;
 		m_is_clicked = false;
 
-#if IRQSWITCH_IMPLEMENT_CLICK_HELD
+#if SWITCH_IMPLEMENT_CLICK_HELD
 		if (ms - m_start_click > m_time_hold) {
 			m_end_click = 0;
 		}
 #endif
 
-#if IRQSWITCH_IMPLEMENT_CLICK_COUNT > 0
-		if (m_end_click > 0 && m_click_count < IRQSWITCH_IMPLEMENT_CLICK_COUNT) {
+#if SWITCH_IMPLEMENT_CLICK_COUNT > 0
+		if (m_end_click > 0 && m_click_count < SWITCH_IMPLEMENT_CLICK_COUNT) {
 			m_click_count++;
 		}
 #endif
@@ -93,7 +93,7 @@ bool IRQSwitch::setClickEnd(uint32_t ms) {
 /**
  * @note Metoda je volana v rutine preruseni. ATOMIC_BLOCK neumistovat!
  */
-bool IRQSwitch::setClickStart(uint32_t ms) {
+bool Switch::setClickStart(uint32_t ms) {
 	if ((ms - m_end_click) > m_time_debounce || m_end_click == 0) {
 		m_start_click = ms;
 		m_is_clicked = true;
@@ -102,47 +102,47 @@ bool IRQSwitch::setClickStart(uint32_t ms) {
 	return false;
 }
 
-#if IRQSWITCH_IMPLEMENT_CLICK_COUNT
+#if SWITCH_IMPLEMENT_CLICK_COUNT
 
-uint8_t IRQSwitch::getClickCount() {
+uint8_t Switch::getClickCount() {
 	uint8_t _click_count;
 
-	IRQSWITCH_ATOMIC_START
+	SWITCH_ATOMIC_START
 		_click_count = m_click_count;
-	IRQSWITCH_ATOMIC_END
+	SWITCH_ATOMIC_END
 
 	return _click_count;
 }
 
-uint8_t IRQSwitch::getClickCountWithReset() {
+uint8_t Switch::getClickCountWithReset() {
 	uint8_t _click_count;
 
-	IRQSWITCH_ATOMIC_START
+	SWITCH_ATOMIC_START
 		_click_count = m_click_count;
 		m_click_count = 0;
-	IRQSWITCH_ATOMIC_END
+	SWITCH_ATOMIC_END
 
 	return _click_count;
 }
 
-void IRQSwitch::cleanClickCount() {
-	IRQSWITCH_ATOMIC_START
+void Switch::cleanClickCount() {
+	SWITCH_ATOMIC_START
 		m_click_count = 0;
-	IRQSWITCH_ATOMIC_END
+	SWITCH_ATOMIC_END
 }
 
 #endif
 
-#if IRQSWITCH_IMPLEMENT_CLICK_HELD_TIME
+#if SWITCH_IMPLEMENT_CLICK_HELD_TIME
 
-uint32_t IRQSwitch::getHoldedTime(uint32_t _ms) {
+uint32_t Switch::getHoldedTime(uint32_t _ms) {
 	bool _is_clicked;
 	uint32_t _start_click;
 
-	IRQSWITCH_ATOMIC_START
+	SWITCH_ATOMIC_START
 		_is_clicked = m_is_clicked;
 		_start_click = m_start_click;
-	IRQSWITCH_ATOMIC_END
+	SWITCH_ATOMIC_END
 
 	if (_is_clicked) {
 		return _ms - _start_click;
@@ -151,18 +151,18 @@ uint32_t IRQSwitch::getHoldedTime(uint32_t _ms) {
 	}
 }
 
-uint32_t IRQSwitch::getHoldedTimeWithReset(uint32_t _ms) {
+uint32_t Switch::getHoldedTimeWithReset(uint32_t _ms) {
 	uint32_t t = 0;
 
 	return t;
 }
 
-bool IRQSwitch::isPressed() {
+bool Switch::isPressed() {
 	bool _is_clicked;
 
-	IRQSWITCH_ATOMIC_START
+	SWITCH_ATOMIC_START
 		_is_clicked = m_is_clicked;
-	IRQSWITCH_ATOMIC_END
+	SWITCH_ATOMIC_END
 
 	return _is_clicked;
 }

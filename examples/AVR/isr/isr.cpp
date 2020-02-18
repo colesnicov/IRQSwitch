@@ -2,12 +2,12 @@
  * cmd:	avrdude -v -patmega328p -carduino -P/dev/ttyUSB0 -b115200 -Uflash:w:/home/denis/Dropbox/Projects/github/temp/Release/temp.hex:i
  *
  *
- * This file is a part of examples of a IRQSwitch library.
+ * This file is a part of examples of a Switch library.
  *
  * Created on:  	17.02.2020
  * Author:    		Denis Colesnicov <eugustus@gmail.com>
  * Licence:   		MIT
- * Home:    		https://github.com/colesnicov/IRQSwitch
+ * Home:    		https://github.com/colesnicov/Switch
  * Description:		Priklad pouziti na AVR.
  *
  * Note:    		Pozor! Testovane pouze na ATMEGA328P!
@@ -17,9 +17,9 @@
 #include <avr/interrupt.h>
 #include <stdlib.h>
 
-#include "IRQSwitch/IRQSwitchArduino.hpp"
-#include "IRQSwitch/IRQSwitchConfig.h"
-#include "IRQSwitch/IRQSwitch.hpp"
+#include "Switch/SwitchArduino.hpp"
+#include "Switch/SwitchConfig.h"
+#include "Switch/Switch.hpp"
 #include "uart/uart.hpp"
 #include "utils/avr.hpp"
 #include "millis/millis.hpp"
@@ -30,8 +30,8 @@
 #define BTN_two 3
 
 // Objekty predstavujici tlacitka
-IRQSwitch btn_two;
-IRQSwitch btn_one;
+Switch btn_two;
+Switch btn_one;
 
 // Piny pro tlacitka
 #define BTN_PIN			PIND
@@ -93,8 +93,8 @@ extern "C" int main() {
 // Povoluji globalni preruseni
 	sei();
 
-	uart_puts((char*) "IRQSwitch Version ");
-	uart_puts((char*) IRQSwitch_Version);
+	uart_puts((char*) "Switch Version ");
+	uart_puts((char*) Switch_Version);
 	uart_puts((char*) "\n");
 	uart_puts((char*) "Ready!\n\n");
 
@@ -109,7 +109,7 @@ extern "C" int main() {
 			uart_puts((char*) "Button 2 clicked!\n");
 		}
 
-#if IRQSWITCH_IMPLEMENT_CLICK_HELD
+#if SWITCH_IMPLEMENT_CLICK_HELD
 		{
 			if (btn_one.isHolded(millis())) {
 				uart_puts((char*) "Button 1 holded!\n");
@@ -121,7 +121,7 @@ extern "C" int main() {
 		}
 #endif
 
-#if IRQSWITCH_IMPLEMENT_CLICK_HELD_TIME
+#if SWITCH_IMPLEMENT_CLICK_HELD_TIME
 		{
 			if (btn_one.isHolded(millis())) {
 				uart_puts((char*) "Button 1 has holded state: '");
@@ -141,7 +141,7 @@ extern "C" int main() {
 		}
 #endif
 
-#if IRQSWITCH_IMPLEMENT_CLICK_COUNT > 0
+#if SWITCH_IMPLEMENT_CLICK_COUNT > 0
 		{
 // Prvni tlacitko je bez automatickeho resetovani pocitadla stisku tlacitka.
 			uint8_t count1 = btn_one.getClickCount();
@@ -157,7 +157,7 @@ extern "C" int main() {
 				uart_puts((char*) "' clicks\n");
 			}
 
-			if (count1 >= IRQSWITCH_IMPLEMENT_CLICK_COUNT)
+			if (count1 >= SWITCH_IMPLEMENT_CLICK_COUNT)
 // Pokud je dosazen limit poctu stisknuti, proved reset pocitadla stisku tlacitka
 			{
 				btn_one.cleanClickCount();

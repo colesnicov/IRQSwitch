@@ -1,40 +1,40 @@
 /**
- This file is a part of IRQSwitch Arduino library.
+ This file is a part of Switch Arduino library.
 
- File:			IRQSwitchArduino.cpp
+ File:			SwitchArduino.cpp
  Created on:	12.02.2020
  Author:		Denis Colesnicov <eugustus@gmail.com>
  Licence:		MIT
- Home:			https://github.com/colesnicov/IRQSwitch
+ Home:			https://github.com/colesnicov/Switch
  Version:		2.9.0
  */
 
-#include "IRQSwitchArduino.hpp"
+#include "SwitchArduino.hpp"
 
-#if IRQSWITCH_ARDUINO
+#if SWITCH_ARDUINO
 
 
 #include "Arduino.h"
 
-void IRQSwitchArduino::AddButton(IRQSwitch *b, uint8_t pin) {
+void SwitchArduino::AddButton(Switch *b, uint8_t pin) {
 	m_buttons[pin] = b;
 }
 
-IRQSwitch* IRQSwitchArduino::GetButton(uint8_t pin) {
+Switch* SwitchArduino::GetButton(uint8_t pin) {
 	return m_buttons[pin];
 }
 
-IRQSwitchArduino::IRQSwitchArduino() {
+SwitchArduino::SwitchArduino() {
 }
 
-void IRQSwitchArduino::Update(uint32_t ms) {
+void SwitchArduino::Update(uint32_t ms) {
 	for (uint8_t i = 0; i < 255; i++) {
 		// Tlacitko je stisknute.
 		if (m_buttons[i] == nullptr) {
 			continue;
 		}
 
-		if (digitalRead(i) == IRQSWITCH_CLICK) {
+		if (digitalRead(i) == SWITCH_CLICK) {
 			if (m_last_clicked == 255) {
 				// Zadne jine tlacitko stisknute neni.
 				m_buttons[i]->setClickStart(ms); // Nastaveni tlacitka jako "PRESSED".

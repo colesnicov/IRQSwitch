@@ -1,13 +1,13 @@
 #pragma once
 
 /**
- * This file is a part of IRQSwitch library for embedded devices.
+ * This file is a part of Switch library for embedded devices.
  *
- * File:		IRQSwitch.hpp
+ * File:		Switch.hpp
  * Created on:	31. 10. 2018
  * Author:		Denis Colesnicov <eugustus@gmail.com>
  * Licence:		MIT
- * Home:		https://github.com/colesnicov/IRQSwitch
+ * Home:		https://github.com/colesnicov/Switch
  * Version:		2.8.1
  *
  * Note:		Attention! The getClickCountWithReset() method should only be used
@@ -52,7 +52,7 @@
  *  - Metody 'bind(...)' a 'unbind(...)' jiz jsou pouzitelne.
  *
  * 29.03.2019 - 2.5.1
- *  - Definice jsou presunuty do samostatneho souboru 'IRQSwitchConfig.h'
+ *  - Definice jsou presunuty do samostatneho souboru 'SwitchConfig.h'
  *
  * 03.02.2020 - 2.6.1
  *  - Metoda 'isHolded()' nyni jako argument prijima cas v milisekundach.
@@ -62,10 +62,10 @@
  * 05.03.2020 - 2.7.0
  *  Kvuli prenositelnosti mezi jinymi platformami..
  *  - Odstraneny metody:
- *    - uint8_t IRQSwitch::getPin()
- *    - void IRQSwitch::bind(uint8_t pin)
- *    - void IRQSwitch::bind(uint8_t pin, uint8_t mode)
- *    - void IRQSwitch::unbind()
+ *    - uint8_t Switch::getPin()
+ *    - void Switch::bind(uint8_t pin)
+ *    - void Switch::bind(uint8_t pin, uint8_t mode)
+ *    - void Switch::unbind()
  *  - Odstranena promena:
  *    - m_pin
  *  - Metoda 'getHoldedTime()' nyni jako argument prijima cas v milisekundach.
@@ -75,46 +75,38 @@
  *
  * 12.02.2020 - 2.8.0
  *	- Vychozi hodnoty pro clenske promene jsou nastaveny v definici tridy.
- *	- Metoda IRQSwitch::getHoldedTimeWithReset(uint32_t _ms) vraci 0.
+ *	- Metoda Switch::getHoldedTimeWithReset(uint32_t _ms) vraci 0.
  *
  *  16.02.2020 - 2.8.1
  *  - Uprava komentaru
  *
  *  16.02.2020 - 2.8.2
- *  - Pridana metoda 'IRQSwitch::isPressed()'
+ *  - Pridana metoda 'Switch::isPressed()'
  *
  *  17.02.2020 - 2.9.0
  *  - Implementace "atomiticidy"
  */
 
-/**
- * @todo Budouci upravy:
- * 			- Implementovat ATOMICke operace.
- * 				Je to dulezite pri pouziti preruseni,
- * 				jinak metody 'getHoldedTime(...)' a 'isHolded(...)'
- * 				pachaji neplechu!!
- */
-
 #include <stdint.h>
 
-#include "IRQSwitchConfig.h"
+#include "SwitchConfig.h"
 
-class IRQSwitch {
+class Switch {
 public:
 
 	/**
 	 * Constructor
 	 * Do nothing
 	 */
-	IRQSwitch();
+	Switch();
 
 	/**
 	 * Destructor
 	 * Do nothing
 	 */
-	~IRQSwitch();
+	~Switch();
 
-#if IRQSWITCH_IMPLEMENT_CLICK_HELD
+#if SWITCH_IMPLEMENT_CLICK_HELD
 
 	/**
 	 * Is the switch has helded?
@@ -123,13 +115,13 @@ public:
 	 *
 	 * @return bool TRUE if is helded, otherwise FALSE
 	 *
-	 * @note See IRQSWITCH_IMPLEMENT_CLICK_HELD definition
+	 * @note See SWITCH_IMPLEMENT_CLICK_HELD definition
 	 */
 	bool isHolded(uint32_t ms);
 
 #endif
 
-#if IRQSWITCH_IMPLEMENT_CLICK_COUNT > 0
+#if SWITCH_IMPLEMENT_CLICK_COUNT > 0
 
 	/**
 	 * Get Click Count on the button.
@@ -138,7 +130,7 @@ public:
 	 *
 	 * @return uint8_t Count of clicks
 	 *
-	 * @note @see IRQSWITCH_IMPLEMENT_CLICK_COUNT
+	 * @note @see SWITCH_IMPLEMENT_CLICK_COUNT
 	 */
 	uint8_t getClickCount();
 
@@ -149,7 +141,7 @@ public:
 	 *
 	 * @return uint8_t Count of clicks
 	 *
-	 * @note @see IRQSWITCH_IMPLEMENT_CLICK_COUNT
+	 * @note @see SWITCH_IMPLEMENT_CLICK_COUNT
 	 */
 	uint8_t getClickCountWithReset();
 
@@ -162,7 +154,7 @@ public:
 
 #endif
 
-#if IRQSWITCH_IMPLEMENT_CLICK_HELD_TIME
+#if SWITCH_IMPLEMENT_CLICK_HELD_TIME
 
 	/**
 	 * Returns the hold time of the button.
@@ -263,13 +255,13 @@ private:
 	bool m_is_clicked = false; /*!< The switch button has bin clicked for now?. */
 	uint32_t m_start_click = 0; /*!< Time in milliseconds where the click/hold action is started. */
 	uint32_t m_end_click = 0; /*!< Time in milliseconds where the click/hold action is ended. */
-	uint16_t m_time_debounce = IRQSWITCH_TIME_DEBOUNCE; /*!< Delay in milliseconds to prevent a debounced noise. */
+	uint16_t m_time_debounce = SWITCH_TIME_DEBOUNCE; /*!< Delay in milliseconds to prevent a debounced noise. */
 
-#if IRQSWITCH_IMPLEMENT_CLICK_HELD
+#if SWITCH_IMPLEMENT_CLICK_HELD
 	uint32_t m_time_hold = 450; /*!< Delay in milliseconds before button hold state is registered. */
 #endif
 
-#if IRQSWITCH_IMPLEMENT_CLICK_COUNT
+#if SWITCH_IMPLEMENT_CLICK_COUNT
 	uint8_t m_click_count = 0; /*!< Incremental variable to maintain the number of button clicks. */
 #endif
 

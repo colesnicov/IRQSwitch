@@ -1,11 +1,11 @@
 /**
-* This file is a part of examples of a IRQSwitch library.
+* This file is a part of examples of a Switch library.
 *
 * Created on:  	31. 10. 2018
 * Updated on: 	12.02.2020
 * Author:    	Denis Colesnicov <eugustus@gmail.com>
 * Licence:   	MIT
-* Home:    		https://github.com/colesnicov/IRQSwitch
+* Home:    		https://github.com/colesnicov/Switch
 * Description:	Priklad pouziti ve funkci loop. Jsou zde ukazany vsechny schopnosti knihovny.
 * Note:    		Pozor! Metoda getClickCount() ma smysl, je pouzitelna pouze, v pripade pouziti externiho preruseni pro zmenu stavu tlacitka!!
 */
@@ -13,8 +13,8 @@
 
 #include <Arduino.h>
 
-#include "IRQSwitch/IRQSwitchConfig.h"
-#include "IRQSwitch/IRQSwitch.hpp"
+#include "Switch/SwitchConfig.h"
+#include "Switch/Switch.hpp"
 
 
 // Definice pinu
@@ -22,8 +22,8 @@
 #define BTN_two 3
 
 // Objekty predstavujici tlacitka
-IRQSwitch btn_two;
-IRQSwitch btn_one;
+Switch btn_two;
+Switch btn_one;
 
 
 // Prevence pred stiskem nekolika tlacitek soucasne.
@@ -76,8 +76,8 @@ void buttonProccess() {
 void setup() {
 	Serial.begin(115200);
 
-	Serial.print("IRQSwitch Version ");
-	Serial.println(IRQSwitch_Version);
+	Serial.print("Switch Version ");
+	Serial.println(Switch_Version);
 
 
 	// Nastavuji piny jako vystup.
@@ -106,7 +106,7 @@ void loop() {
 		Serial.println("Button 2 clicked!");
 	}
 
-#if IRQSWITCH_IMPLEMENT_CLICK_HELD
+#if SWITCH_IMPLEMENT_CLICK_HELD
 	{
 		if (btn_one.isHolded(millis())) {
 			Serial.println("Button 1 holded!");
@@ -118,7 +118,7 @@ void loop() {
 	}
 #endif
 
-#if IRQSWITCH_IMPLEMENT_CLICK_HELD_TIME
+#if SWITCH_IMPLEMENT_CLICK_HELD_TIME
 	{
 		if (btn_one.isHolded(millis())) {
 			Serial.print("Button 1 has holded state: '");
@@ -134,7 +134,7 @@ void loop() {
 	}
 #endif
 
-#if IRQSWITCH_IMPLEMENT_CLICK_COUNT > 0
+#if SWITCH_IMPLEMENT_CLICK_COUNT > 0
 	{
 		// Prvni tlacitko je bez automatickeho resetovani pocitadla stisku tlacitka.
 		uint8_t count1 = btn_one.getClickCount();
@@ -148,7 +148,7 @@ void loop() {
 			Serial.println("' clicks");
 		}
 
-		if (count1 >= IRQSWITCH_IMPLEMENT_CLICK_COUNT)
+		if (count1 >= SWITCH_IMPLEMENT_CLICK_COUNT)
 		// Pokud je dosazen limit poctu stisknuti, proved reset pocitadla stisku tlacitka
 		{
 			btn_one.cleanClickCount();

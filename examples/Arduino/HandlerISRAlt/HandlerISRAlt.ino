@@ -1,10 +1,10 @@
 /**
- * This file is a part of examples of a IRQSwitch library.
+ * This file is a part of examples of a Switch library.
  *
  * Created on:  	16.02.2020
  * Author:    		Denis Colesnicov <eugustus@gmail.com>
  * Licence:   		MIT
- * Home:    		https://github.com/colesnicov/IRQSwitch
+ * Home:    		https://github.com/colesnicov/Switch
  * Description:		Priklad pouziti alternativnich tlacitek s prerusenim.
  * 					 Je zde ukazana moznost stisku nekolika tlacitek soucasne.
  * Note:    		Pozor! Jedna se o "pure concept"! Funkcnost neni doladena!
@@ -12,23 +12,23 @@
 
 #include <Arduino.h>
 
-#include "IRQSwitch/IRQSwitchArduino.hpp"
-#include "IRQSwitch/IRQSwitchConfig.h"
-#include "IRQSwitch/IRQSwitch.hpp"
+#include "Switch/SwitchArduino.hpp"
+#include "Switch/SwitchConfig.h"
+#include "Switch/Switch.hpp"
 
 // Definice pinu
 #define BTN_one 2
 #define BTN_two 3
 
 // Objekty predstavujici tlacitka
-IRQSwitch btn_two;
-IRQSwitch btn_one;
+Switch btn_two;
+Switch btn_one;
 
 // Spravce obsluhy stavu tlacitek
-IRQSwitchArduino handler;
+SwitchArduino handler;
 
 // Spravce obsluhy stavu alternativnich tlacitek
-IRQSwitchArduino handlerAlt;
+SwitchArduino handlerAlt;
 
 void buttonProccess() {
 	handler.Update(millis());
@@ -41,8 +41,8 @@ void buttonProccessAlt() {
 void setup() {
 	Serial.begin(115200);
 
-	Serial.print("IRQSwitch Version ");
-	Serial.println(IRQSwitch_Version);
+	Serial.print("Switch Version ");
+	Serial.println(Switch_Version);
 
 	// Nastavuji piny jako vystup.
 	pinMode(BTN_one, INPUT);

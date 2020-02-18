@@ -1,13 +1,13 @@
 #pragma once
 
 /**
- * This file is a part of IRQSwitch Arduino library.
+ * This file is a part of Switch Arduino library.
  *
- * File:		IRQSwitchArduino.hpp
+ * File:		SwitchArduino.hpp
  * Created on:	12.02.2020
  * Author:		Denis Colesnicov <eugustus@gmail.com>
  * Licence:		MIT
- * Home:		https://github.com/colesnicov/IRQSwitch
+ * Home:		https://github.com/colesnicov/Switch
  * Version:		2.9.0
  */
 
@@ -16,22 +16,22 @@
  * 			Pocet tlacitek by mel odpovidat maximalnimu mnozstvi pinu MCU + 1
  */
 
-#include "IRQSwitchConfig.h"
+#include "SwitchConfig.h"
 
-#if IRQSWITCH_ARDUINO
+#if SWITCH_ARDUINO
 
 #include <stdint.h>
 
-#include "IRQSwitch.hpp"
+#include "Switch.hpp"
 
-class IRQSwitchArduino {
+class SwitchArduino {
 public:
 
 	/**
 	 * Constructor
 	 * Do nothing.
 	 */
-	IRQSwitchArduino();
+	SwitchArduino();
 
 	/**
 	 * Add button to "watch".
@@ -42,7 +42,7 @@ public:
 	 * @param	pin	Pin number, 0 ... max arduino pin number
 	 *
 	 */
-	void AddButton(IRQSwitch *b, uint8_t pin);
+	void AddButton(Switch *b, uint8_t pin);
 
 	/**
 	 * Update states.
@@ -64,13 +64,13 @@ public:
 	 *
 	 * @param id	ID of button.
 	 *
-	 * @return	IRQSwitch*	Pointer to object.
+	 * @return	Switch*	Pointer to object.
 	 */
-	IRQSwitch* GetButton(uint8_t pin);
+	Switch* GetButton(uint8_t pin);
 
 private:
 
-	IRQSwitch *m_buttons[255] = { nullptr }; /*!< List of buttons. */
+	Switch *m_buttons[255] = { nullptr }; /*!< List of buttons. */
 	uint8_t m_last_clicked = 255; /*!< ID of last clicket button */
 };
 
